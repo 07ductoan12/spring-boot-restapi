@@ -1,30 +1,46 @@
 package com.toan.weatherforecast.common;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "location")
 public class Location {
 	@Column(length = 12, nullable = false, unique = true)
 	@Id
+	@NotBlank
 	private String code;
 
 	@Column(length = 128, nullable = false)
+	@JsonProperty("city_name")
+	@NotBlank
 	private String cityName;
 
 	@Column(length = 128)
+	@JsonProperty("region_name")
+	@NotNull
 	private String regionName;
 
 	@Column(length = 64, nullable = false)
+	@JsonProperty("country_name")
+	@NotBlank
 	private String countryName;
 
 	@Column(length = 2, nullable = false)
+	@JsonProperty("country_code")
+	@NotBlank
 	private String countryCode;
 
 	private boolean enabled;
+
+	@JsonIgnore
 	private boolean trashed;
 
 	public String getCode() {
@@ -81,6 +97,31 @@ public class Location {
 
 	public void setTrashed(boolean trashed) {
 		this.trashed = trashed;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((code == null) ? 0 : code.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Location other = (Location) obj;
+		if (code == null) {
+			if (other.code != null)
+				return false;
+		} else if (!code.equals(other.code))
+			return false;
+		return true;
 	}
 
 }
