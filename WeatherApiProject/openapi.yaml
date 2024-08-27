@@ -1,0 +1,62 @@
+openapi: 3.0.3
+info:
+  title: Example Api Users
+  version: 1.0.11
+  description: APIs about user management
+  termsOfService: https://toan-test.com/terms
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+servers:
+  - url: http://localhost:8080
+    variables: {}
+    description: Local server development
+tags:
+  - name: user
+    description: Everything about user
+paths:
+  /users:
+    summary: Operations about users
+    get:
+      summary: Get user information
+      description: Returns a list of users
+      operationId: listUsers
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              examples:
+                A list of users:
+                  value: |-
+                    [
+                        {
+                            "id": 1,
+                            "email": "toantest1@gmail.com",
+                            "name": "nguyen duc toan 1"
+                        },
+                        {
+                            "id": 2,
+                            "email": "toantest2@gmail.com",
+                            "name": "nguyen duc toan 2"
+                        }
+                    ]
+        '204':
+          description: No content avaiable
+      tags:
+        - users
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 90
+        name:
+          type: string
+          example: Nguyen Duc Toan
+        email:
+          type: string
+          example: toantest1@gmail.com
