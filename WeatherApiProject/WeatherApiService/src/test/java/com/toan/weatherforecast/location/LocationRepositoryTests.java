@@ -3,6 +3,8 @@ package com.toan.weatherforecast.location;
 import com.toan.weatherforecast.common.Location;
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -30,5 +32,45 @@ public class LocationRepositoryTests {
         Location savedLocation = repository.save(location);
         assertThat(savedLocation).isNotNull();
         assertThat(savedLocation.getCode()).isEqualTo("NYC_USA");
+    }
+
+    @Test
+    public void testListSuccess() {
+
+        List<Location> locations = repository.findUntrashed();
+
+        assertThat(locations).isNotEmpty();
+
+        System.out.println(locations);
+        locations.forEach(System.out::println);
+    }
+
+    @Test
+    public void testGetNotFound() {
+        String code = "ABCD";
+        Location location = repository.findByCode(code);
+
+        assertThat(location).isNull();
+
+    }
+
+    @Test
+    public void testGetFound() {
+        String code = "DELHI_IN";
+        Location location = repository.findByCode(code);
+
+        assertThat(location).isNotNull();
+        assertThat(location.getCode()).isEqualTo(code);
+
+    }
+
+    @Test
+    public void testTrashSuccess() {
+        String code = "LACA_USA";
+
+        repository.trashByCode(code);
+        Location location = repository.findByCode(code);
+
+        assertThat(location).isNull();
     }
 }

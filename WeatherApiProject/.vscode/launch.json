@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-WeatherApiServiceApplication<WeatherApiService>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.toan.weatherforecast.WeatherApiServiceApplication",
+            "projectName": "WeatherApiService",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
