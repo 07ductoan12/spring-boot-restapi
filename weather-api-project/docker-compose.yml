@@ -1,0 +1,18 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: weatherdb
+    ports:
+      - "3306:3306"
+    networks:
+      - springboot-network
+    volumes:
+      - "./docker/db/data:/var/lib/mysql"
+
+networks:
+  springboot-network:
+    driver: bridge
