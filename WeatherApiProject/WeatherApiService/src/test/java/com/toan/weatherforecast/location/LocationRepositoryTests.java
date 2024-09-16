@@ -1,8 +1,11 @@
 package com.toan.weatherforecast.location;
 
 import com.toan.weatherforecast.common.Location;
+import com.toan.weatherforecast.common.RealtimeWeather;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.sql.Date;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -72,5 +75,31 @@ public class LocationRepositoryTests {
         Location location = repository.findByCode(code);
 
         assertThat(location).isNull();
+    }
+
+    @Test
+    public void testAddRealtimeWeatherData() {
+        String code = "NYC_USA";
+
+        Location location = repository.findByCode(code);
+
+        RealtimeWeather realtimeWeather = location.getRealtimeWeather();
+
+        if (realtimeWeather == null) {
+            realtimeWeather = new RealtimeWeather();
+            realtimeWeather.setLocation(location);
+            location.setRealtimeWeather(realtimeWeather);
+        }
+
+        realtimeWeather.setTemperature(-1);
+        realtimeWeather.setHumidity(30);
+        realtimeWeather.setPrecipation(40);
+        realtimeWeather.setStatus("Snowy");
+        realtimeWeather.setWindSpeed(15);
+        realtimeWeather.setLastUpdated(new Date(System.currentTimeMillis()));
+
+        Location updatedLocation = repository.save(location);
+
+        assertThat(updatedLocation.getRealtimeWeather().getLocationCode()).isEqualTo(code);
     }
 }

@@ -1,0 +1,7 @@
+### Get all list students
+GET localhost:8080/api/students?pageSize=60&page=60
+Content-Type: application/json
+
+### Delete sutdent with id
+DELETE localhost:8080/api/students/-2
+Content-Type: application/json
