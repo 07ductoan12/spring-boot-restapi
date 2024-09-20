@@ -18,7 +18,7 @@ import com.toan.weatherforecast.common.RealtimeWeather;
 @Rollback(false)
 public class RealtimeWeatherRepositoryTests {
     @Autowired
-    private RealtimeWeatherRepositor repo;
+    private RealtimeWeatherRepository repo;
 
     @Test
     public void testUpdate() {
@@ -41,11 +41,12 @@ public class RealtimeWeatherRepositoryTests {
 
     @Test
     public void testFindByCountryCodeAndCityNotFound() {
-        String countryCode = "JP";
-        String cityName = "Tokyo";
+        String countryCode = "US";
+        String cityName = "New York City";
 
         RealtimeWeather realtimeWeather = repo.findByCountryCodeAndCity(countryCode, cityName);
 
-        assertThat(realtimeWeather).isNull();
+        assertThat(realtimeWeather).isNotNull();
+        assertThat(realtimeWeather.getLocation().getCityName()).isEqualTo(cityName);
     }
 }

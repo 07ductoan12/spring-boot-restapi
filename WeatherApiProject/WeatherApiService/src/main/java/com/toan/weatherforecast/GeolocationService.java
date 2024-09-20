@@ -14,7 +14,7 @@ import com.toan.weatherforecast.common.Location;
 public class GeolocationService {
     private static final Logger LOGGER = LoggerFactory.getLogger(GeolocationService.class);
 
-    private String DBPath = "ip2locdb/IP2LOCATION-LITE-DB3.BIN";
+    private String DBPath = "WeatherApiService/ip2locdb/IP2LOCATION-LITE-DB3.BIN";
     IP2Location ipLocator = new IP2Location();
 
     public GeolocationService() {
@@ -32,6 +32,8 @@ public class GeolocationService {
             if (!"OK".equals(result.getStatus())) {
                 throw new GeolocationException("Geolocation failed with status: " + result.getStatus());
             }
+
+            LOGGER.info(result.toString());
 
             return new Location(result.getCity(), result.getRegion(), result.getCountryLong(),
                     result.getCountryShort());
