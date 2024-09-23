@@ -2,10 +2,11 @@ package com.toan.weatherforecast.common;
 
 import java.sql.Date;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatTypes;
+import org.hibernate.validator.constraints.Range;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -19,9 +20,12 @@ import jakarta.persistence.Table;
 public class RealtimeWeather {
     @Id
     @Column(name = "location_code")
+    @JsonIgnore
     private String locationCode;
 
+    @Range(min = -50, max = 50, message = "Temperator must be in the range -50 to 50 Celsius degree")
     private int temperature;
+
     private int humidity;
     private int precipitation;
 
@@ -32,6 +36,7 @@ public class RealtimeWeather {
     private String status;
 
     @JsonProperty("last_updated")
+    @JsonIgnore
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
     private Date lastUpdated;
 
