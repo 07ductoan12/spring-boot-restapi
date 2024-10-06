@@ -6,9 +6,8 @@
   <packaging>pom</packaging>
   <name>WeatherApiProject</name>
   <description>Root project</description>
-  
   <modules>
   <module>WeatherApiCommon</module>
   <module>WeatherApiService</module>
- </modules>
+  </modules>
 </project>
