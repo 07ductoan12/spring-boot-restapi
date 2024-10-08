@@ -24,12 +24,9 @@ public class LocationApiControllerTests {
 
     private static final String END_POINT_PATH = "/v1/locations";
 
-    @Autowired
-    MockMvc mockMvc;
-    @Autowired
-    ObjectMapper mapper;
-    @MockBean
-    LocationService service;
+    @Autowired MockMvc mockMvc;
+    @Autowired ObjectMapper mapper;
+    @MockBean LocationService service;
 
     @Test
     public void testAddShouldReturn400BadRequest() throws Exception {
@@ -37,8 +34,11 @@ public class LocationApiControllerTests {
 
         String bodyContent = mapper.writeValueAsString(location);
 
-        mockMvc.perform(MockMvcRequestBuilders.post(END_POINT_PATH).contentType("application/json")
-                .content(bodyContent)).andExpect(MockMvcResultMatchers.status().isBadRequest())
+        mockMvc.perform(
+                        MockMvcRequestBuilders.post(END_POINT_PATH)
+                                .contentType("application/json")
+                                .content(bodyContent))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
                 .andDo(MockMvcResultHandlers.print());
     }
 
@@ -57,8 +57,11 @@ public class LocationApiControllerTests {
 
         String bodyContent = mapper.writeValueAsString(location);
 
-        mockMvc.perform(MockMvcRequestBuilders.post(END_POINT_PATH).contentType("application/json")
-                .content(bodyContent)).andExpect(MockMvcResultMatchers.status().isCreated())
+        mockMvc.perform(
+                        MockMvcRequestBuilders.post(END_POINT_PATH)
+                                .contentType("application/json")
+                                .content(bodyContent))
+                .andExpect(MockMvcResultMatchers.status().isCreated())
                 .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.code", is("NYC_USA")))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.city_name", is("New York City")))
@@ -163,8 +166,11 @@ public class LocationApiControllerTests {
 
         String bodyContent = mapper.writeValueAsString(location);
 
-        mockMvc.perform(MockMvcRequestBuilders.put(END_POINT_PATH).contentType("application/json")
-                .content(bodyContent)).andExpect(MockMvcResultMatchers.status().isNotFound())
+        mockMvc.perform(
+                        MockMvcRequestBuilders.put(END_POINT_PATH)
+                                .contentType("application/json")
+                                .content(bodyContent))
+                .andExpect(MockMvcResultMatchers.status().isNotFound())
                 .andDo(MockMvcResultHandlers.print());
     }
 
@@ -181,8 +187,11 @@ public class LocationApiControllerTests {
 
         String bodyContent = mapper.writeValueAsString(location);
 
-        mockMvc.perform(MockMvcRequestBuilders.put(END_POINT_PATH).contentType("application/json")
-                .content(bodyContent)).andExpect(MockMvcResultMatchers.status().isBadRequest())
+        mockMvc.perform(
+                        MockMvcRequestBuilders.put(END_POINT_PATH)
+                                .contentType("application/json")
+                                .content(bodyContent))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
                 .andDo(MockMvcResultHandlers.print());
     }
 
@@ -200,11 +209,38 @@ public class LocationApiControllerTests {
 
         String bodyContent = mapper.writeValueAsString(location);
 
-        mockMvc.perform(MockMvcRequestBuilders.put(END_POINT_PATH).contentType("application/json")
-                .content(bodyContent)).andExpect(MockMvcResultMatchers.status().isOk())
+        mockMvc.perform(
+                        MockMvcRequestBuilders.put(END_POINT_PATH)
+                                .contentType("application/json")
+                                .content(bodyContent))
+                .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.code", is("NYC_USA")))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.city_name", is("New York City")))
+                .andDo(MockMvcResultHandlers.print());
+    }
+
+    @Test
+    public void testDeleteShouldReturn404NotFound() throws Exception {
+        String code = "LACA_USA";
+        String requestURI = END_POINT_PATH + "/" + code;
+
+        Mockito.doThrow(LocationNotFoundException.class).when(service).delete(code);
+
+        mockMvc.perform(MockMvcRequestBuilders.delete(requestURI))
+                .andExpect(MockMvcResultMatchers.status().isNotFound())
+                .andDo(MockMvcResultHandlers.print());
+    }
+
+    @Test
+    public void testDeleteShouldReturn204NoContent() throws Exception {
+        String code = "LACA_USA";
+        String requestURI = END_POINT_PATH + "/" + code;
+
+        Mockito.doNothing().when(service).delete(code);
+
+        mockMvc.perform(MockMvcRequestBuilders.delete(requestURI))
+                .andExpect(MockMvcResultMatchers.status().isNoContent())
                 .andDo(MockMvcResultHandlers.print());
     }
 }

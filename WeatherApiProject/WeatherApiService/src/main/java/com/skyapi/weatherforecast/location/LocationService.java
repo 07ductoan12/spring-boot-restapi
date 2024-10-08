@@ -1,20 +1,21 @@
 package com.skyapi.weatherforecast.location;
 
-import java.util.List;
-import org.springframework.stereotype.Service;
 import com.skyapi.weatherforecast.common.Location;
 
-/**
- * LocationService
- */
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
+/** LocationService */
 @Service
+@Transactional
 public class LocationService {
     private LocationRepository repo;
 
     public LocationService(LocationRepository repo) {
         this.repo = repo;
     }
-
 
     public Location add(Location location) {
         return repo.save(location);
@@ -44,5 +45,15 @@ public class LocationService {
         locationInDB.setEnabled(locationInRequest.isEnabled());
 
         return repo.save(locationInDB);
+    }
+
+    public void delete(String code) throws LocationNotFoundException {
+        Location location = repo.findByCode(code);
+
+        if (location == null) {
+            throw new LocationNotFoundException("No location found with the given code: " + code);
+        }
+
+        repo.trashedByCode(code);
     }
 }

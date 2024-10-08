@@ -2,6 +2,7 @@ package com.skyapi.weatherforecast.common;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -9,9 +10,7 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-/**
- * Location
- */
+/** Location */
 @Entity
 @Table(name = "locations")
 public class Location {
@@ -43,8 +42,7 @@ public class Location {
 
     private boolean enabled;
 
-    @JsonIgnore
-    private boolean trashed;
+    @JsonIgnore private boolean trashed;
 
     public Location() {}
 
@@ -114,27 +112,32 @@ public class Location {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
+        if (this == obj) return true;
+        if (obj == null) return false;
+        if (getClass() != obj.getClass()) return false;
         Location other = (Location) obj;
         if (code == null) {
-            if (other.code != null)
-                return false;
-        } else if (!code.equals(other.code))
-            return false;
+            if (other.code != null) return false;
+        } else if (!code.equals(other.code)) return false;
         return true;
     }
 
     @Override
     public String toString() {
-        return "Location [code=" + code + ", cityName=" + cityName + ", regionName=" + regionName
-                + ", countryName=" + countryName + ", countryCode=" + countryCode + ", enabled="
-                + enabled + ", trashed=" + trashed + "]";
+        return "Location [code="
+                + code
+                + ", cityName="
+                + cityName
+                + ", regionName="
+                + regionName
+                + ", countryName="
+                + countryName
+                + ", countryCode="
+                + countryCode
+                + ", enabled="
+                + enabled
+                + ", trashed="
+                + trashed
+                + "]";
     }
-
-
 }
