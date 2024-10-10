@@ -19,7 +19,7 @@ import java.util.Date;
 @Rollback(false)
 public class RealtimeWeatherRepositoryTests {
 
-    @Autowired private RealtimeWeartherRepository repo;
+    @Autowired private RealtimeWeatherRepository repo;
 
     @Test
     public void testUpdate() {
@@ -37,5 +37,26 @@ public class RealtimeWeatherRepositoryTests {
         RealtimeWeather updatedRealtimeWeather = repo.save(realtimeWeather);
 
         assertThat(updatedRealtimeWeather.getHumidity()).isEqualTo(32);
+    }
+
+    @Test
+    public void testFindByCountryAndCityNotFound() {
+        String countryCode = "JP";
+        String cityName = "Tokyo";
+
+        RealtimeWeather realtimeWeather = repo.findByCountryAndCity(countryCode, cityName);
+
+        assertThat(realtimeWeather).isNull();
+    }
+
+    @Test
+    public void testFindByCountryAndCityFound() {
+        String countryCode = "US";
+        String cityName = "New York City";
+
+        RealtimeWeather realtimeWeather = repo.findByCountryAndCity(countryCode, cityName);
+
+        assertThat(realtimeWeather).isNotNull();
+        assertThat(realtimeWeather.getLocation().getCityName()).isEqualTo(cityName);
     }
 }

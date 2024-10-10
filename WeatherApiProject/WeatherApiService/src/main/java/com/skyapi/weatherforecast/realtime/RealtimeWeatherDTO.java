@@ -1,23 +1,14 @@
-package com.skyapi.weatherforecast.common;
+package com.skyapi.weatherforecast.realtime;
 
-import java.util.Date;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.persistence.Column;
+
 import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.MapsId;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
-/** RealtimeWeather */
-@Entity
-@Table(name = "realtime_weather")
-public class RealtimeWeather {
-    @Id
-    @Column(name = "location_code")
-    private String locationCode;
+import java.sql.Date;
+
+public class RealtimeWeatherDTO {
+    private String location;
 
     private int temperature;
     private int humidity;
@@ -26,24 +17,17 @@ public class RealtimeWeather {
     @JsonProperty("wind_speed")
     private int windSpeed;
 
-    @Column(length = 50)
     private String status;
 
     @JsonProperty("last_updated")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
     private Date lastUpdated;
 
-    @OneToOne
-    @JoinColumn(name = "location_code")
-    @MapsId
-    private Location location;
-
-    public String getLocationCode() {
-        return locationCode;
+    public String getLocation() {
+        return location;
     }
 
-    public void setLocationCode(String locationCode) {
-        this.locationCode = locationCode;
+    public void setLocation(String location) {
+        this.location = location;
     }
 
     public int getTemperature() {
@@ -92,14 +76,5 @@ public class RealtimeWeather {
 
     public void setLastUpdated(Date lastUpdated) {
         this.lastUpdated = lastUpdated;
-    }
-
-    public Location getLocation() {
-        return location;
-    }
-
-    public void setLocation(Location location) {
-        this.locationCode = location.getCode();
-        this.location = location;
     }
 }
