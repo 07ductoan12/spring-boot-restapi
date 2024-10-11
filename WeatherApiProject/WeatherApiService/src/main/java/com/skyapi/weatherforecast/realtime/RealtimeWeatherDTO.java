@@ -2,9 +2,6 @@ package com.skyapi.weatherforecast.realtime;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
-
 import java.sql.Date;
 
 public class RealtimeWeatherDTO {
