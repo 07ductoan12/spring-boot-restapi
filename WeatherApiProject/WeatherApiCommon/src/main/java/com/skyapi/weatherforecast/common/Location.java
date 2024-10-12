@@ -7,12 +7,16 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Length;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /** Location */
 @Entity
@@ -50,21 +54,15 @@ public class Location {
 
     private boolean enabled;
 
-    @JsonIgnore
-    private boolean trashed;
+    @JsonIgnore private boolean trashed;
 
     @OneToOne(mappedBy = "location", cascade = CascadeType.ALL)
     @PrimaryKeyJoinColumn
     @JsonIgnore
     private RealtimeWeather realtimeWeather;
 
-    public RealtimeWeather getRealtimeWeather() {
-        return realtimeWeather;
-    }
-
-    public void setRealtimeWeather(RealtimeWeather realtimeWeather) {
-        this.realtimeWeather = realtimeWeather;
-    }
+    @OneToMany(mappedBy = "id.location", cascade = CascadeType.ALL)
+    private List<HourlyWeather> listHourlyWeather = new ArrayList<>();
 
     public Location() {}
 
@@ -73,6 +71,14 @@ public class Location {
         this.regionName = regionName;
         this.countryName = countryName;
         this.countryCode = countryCode;
+    }
+
+    public RealtimeWeather getRealtimeWeather() {
+        return realtimeWeather;
+    }
+
+    public void setRealtimeWeather(RealtimeWeather realtimeWeather) {
+        this.realtimeWeather = realtimeWeather;
     }
 
     public String getCode() {
@@ -139,25 +145,33 @@ public class Location {
         return result;
     }
 
+    public List<HourlyWeather> getListHourlyWeather() {
+        return listHourlyWeather;
+    }
+
+    public void setListHourlyWeather(List<HourlyWeather> listHourlyWeather) {
+        this.listHourlyWeather = listHourlyWeather;
+    }
+
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
+        if (this == obj) return true;
+        if (obj == null) return false;
+        if (getClass() != obj.getClass()) return false;
         Location other = (Location) obj;
         if (code == null) {
-            if (other.code != null)
-                return false;
-        } else if (!code.equals(other.code))
-            return false;
+            if (other.code != null) return false;
+        } else if (!code.equals(other.code)) return false;
         return true;
     }
 
     @Override
     public String toString() {
         return cityName + ", " + (regionName != null ? regionName + ", " : "") + countryName;
+    }
+
+    public Location code(String code) {
+        setCode(code);
+        return this;
     }
 }

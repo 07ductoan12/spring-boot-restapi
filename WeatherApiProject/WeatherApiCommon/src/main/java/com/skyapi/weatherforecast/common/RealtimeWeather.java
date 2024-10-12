@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.Objects;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.Range;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Column;
@@ -24,15 +23,13 @@ public class RealtimeWeather {
     @JsonIgnore
     private String locationCode;
 
-    @Range(min = -50, max = 50,
-            message = "Temperature must be in the range of -50 to 50 Celsius degree")
+    @Range(min = -50, max = 50, message = "Temperature must be in the range of -50 to 50 Celsius degree")
     private int temperature;
 
     @Range(min = 0, max = 100, message = "Humidity must be in the range of 0 to 100 percentage")
     private int humidity;
 
-    @Range(min = 0, max = 100,
-            message = "Precipitation must be in the range of 0 to 100 percentage")
+    @Range(min = 0, max = 100, message = "Precipitation must be in the range of 0 to 100 percentage")
     private int precipitation;
 
     @JsonProperty("wind_speed")
