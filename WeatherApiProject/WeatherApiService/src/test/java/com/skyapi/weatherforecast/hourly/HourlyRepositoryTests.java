@@ -1,4 +1,4 @@
-package com.skyapi.weatherforecast.location;
+package com.skyapi.weatherforecast.hourly;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -13,6 +13,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.annotation.Rollback;
 
+import java.util.List;
 import java.util.Optional;
 
 /** HourlyRepositoryTests */
@@ -20,8 +21,7 @@ import java.util.Optional;
 @AutoConfigureTestDatabase(replace = Replace.NONE)
 @Rollback(false)
 public class HourlyRepositoryTests {
-    @Autowired
-    private HourlyWeatherRepository repo;
+    @Autowired private HourlyWeatherRepository repo;
 
     @Test
     public void testAdd() {
@@ -30,8 +30,13 @@ public class HourlyRepositoryTests {
 
         Location location = new Location().code(locationCode);
 
-        HourlyWeather forecast = new HourlyWeather().location(location).hourOfDay(hourOfDay)
-                .temperature(13).precipitation(70).status("Clody");
+        HourlyWeather forecast =
+                new HourlyWeather()
+                        .location(location)
+                        .hourOfDay(hourOfDay)
+                        .temperature(13)
+                        .precipitation(70)
+                        .status("Clody");
 
         HourlyWeather updatedForecast = repo.save(forecast);
 
@@ -48,5 +53,25 @@ public class HourlyRepositoryTests {
 
         Optional<HourlyWeather> result = repo.findById(id);
         assertThat(result).isNotPresent();
+    }
+
+    @Test
+    public void testFindByLocationCodeFound() {
+        String locationCode = "DELHI_IN";
+        int currentHour = 10;
+
+        List<HourlyWeather> hourlyForecast = repo.findByLocationCode(locationCode, currentHour);
+
+        assertThat(hourlyForecast).isNotEmpty();
+    }
+
+    @Test
+    public void testFindByLocationCodeNotFound() {
+        String locationCode = "MBMN_IN";
+        int currentHour = 6;
+
+        List<HourlyWeather> hourlyForecast = repo.findByLocationCode(locationCode, currentHour);
+
+        assertThat(hourlyForecast).isEmpty();
     }
 }

@@ -1,6 +1,7 @@
 package com.skyapi.weatherforecast.location;
 
 import static org.assertj.core.api.Assertions.assertThat;
+
 import com.skyapi.weatherforecast.common.HourlyWeather;
 import com.skyapi.weatherforecast.common.Location;
 import com.skyapi.weatherforecast.common.RealtimeWeather;
@@ -21,8 +22,7 @@ import java.util.List;
 @Rollback(false)
 public class LocationRepositoryTests {
 
-    @Autowired
-    private LocationRepository repository;
+    @Autowired private LocationRepository repository;
 
     @Test
     public void testAddSuccess() {
@@ -109,10 +109,18 @@ public class LocationRepositoryTests {
         Location location = repository.findById("DELHI_IN").get();
         List<HourlyWeather> listHourlyWeather = location.getListHourlyWeather();
 
-        HourlyWeather forecast1 = new HourlyWeather().id(location, 10).temperature(15)
-                .precipitation(40).status("Sunny");
-        HourlyWeather forecast2 = new HourlyWeather().id(location, 11).temperature(16)
-                .precipitation(50).status("Cloundy");
+        HourlyWeather forecast1 =
+                new HourlyWeather()
+                        .id(location, 10)
+                        .temperature(15)
+                        .precipitation(40)
+                        .status("Sunny");
+        HourlyWeather forecast2 =
+                new HourlyWeather()
+                        .id(location, 11)
+                        .temperature(16)
+                        .precipitation(50)
+                        .status("Cloundy");
 
         listHourlyWeather.add(forecast1);
         listHourlyWeather.add(forecast2);
@@ -120,5 +128,27 @@ public class LocationRepositoryTests {
         Location savedLocation = repository.save(location);
 
         assertThat(savedLocation.getListHourlyWeather()).isNotEmpty();
+    }
+
+    @Test
+    public void testFindByCountryCodeAndCityNotFound() {
+        String countryCode = "US";
+        String cityName = "New York City";
+
+        Location location = repository.findByCountryCodeAndCityName(countryCode, cityName);
+
+        assertThat(location).isNull();
+    }
+
+    @Test
+    public void testFindByCountryCodeAndCityFound() {
+        String countryCode = "IN";
+        String cityName = "Delhi";
+
+        Location location = repository.findByCountryCodeAndCityName(countryCode, cityName);
+
+        assertThat(location).isNotNull();
+        assertThat(location.getCountryCode()).isEqualTo(countryCode);
+        assertThat(location.getCityName()).isEqualTo(cityName);
     }
 }
